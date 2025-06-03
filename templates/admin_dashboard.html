@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <a href="{{ url_for('logout') }}">Logout</a>
+        
+        <h2>Add Meter Reading</h2>
+        <form method="POST" action="{{ url_for('add_reading') }}">
+            <div class="form-group">
+                <label for="customer_id">Customer:</label>
+                <select id="customer_id" name="customer_id" required>
+                    {% for customer in customers %}
+                    <option value="{{ customer.id }}">{{ customer.name }} (Meter: {{ customer.meter_number }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="units">Units:</label>
+                <input type="number" id="units" name="units" required>
+            </div>
+            <button type="submit">Add Reading</button>
+        </form>
+        
+        <h2>Update Tariff</h2>
+        <form method="POST" action="{{ url_for('update_tariff') }}">
+            <div class="form-group">
+                <label for="slab">Slab (Units):</label>
+                <input type="number" id="slab" name="slab" required>
+            </div>
+            <div class="form-group">
+                <label for="rate">Rate per Unit:</label>
+                <input type="number" step="0.01" id="rate" name="rate" required>
+            </div>
+            <button type="submit">Update Tariff</button>
+        </form>
+        
+        <h2>Customers</h2>
+        <table class="table">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Meter Number</th>
+            </tr>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.meter_number }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <h2>Current Tariffs</h2>
+        <table class="table">
+            <tr>
+                <th>Slab</th>
+                <th>Rate</th>
+                <th>Effective Date</th>
+            </tr>
+            {% for tariff in tariffs %}
+            <tr>
+                <td>{{ tariff.slab }}</td>
+                <td>{{ tariff.rate }}</td>
+                <td>{{ tariff.effective_date }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

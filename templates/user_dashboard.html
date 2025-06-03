@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>User Dashboard</h1>
+        <a href="{{ url_for('logout') }}">Logout</a>
+        <h2>Your Bills</h2>
+        <table class="table">
+            <tr>
+                <th>Bill Date</th>
+                <th>Due Date</th>
+                <th>Units</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            {% for bill in bills %}
+            <tr>
+                <td>{{ bill.bill_date }}</td>
+                <td>{{ bill.due_date }}</td>
+                <td>{{ bill.units }}</td>
+                <td>{{ bill.amount }}</td>
+                <td>{{ bill.status }}</td>
+                <td>
+                    {% if bill.status == 'Pending' %}
+                    <form method="POST" action="{{ url_for('pay_bill', bill_id=bill.id) }}">
+                        <button type="submit">Pay Now</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <h2>Recent Readings</h2>
+        <table class="table">
+            <tr>
+                <th>Date</th>
+                <th>Units</th>
+            </tr>
+            {% for reading in readings %}
+            <tr>
+                <td>{{ reading.reading_date }}</td>
+                <td>{{ reading.units }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <a href="{{ url_for('usage_report') }}">View Usage Report</a>
+    </div>
+</body>
+</html>

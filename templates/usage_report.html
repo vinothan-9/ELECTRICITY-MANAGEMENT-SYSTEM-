@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Usage Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Usage Report</h1>
+        <a href="{{ url_for('user_dashboard') }}">Back to Dashboard</a>
+        <div class="chart-container">
+            <canvas id="usageChart"></canvas>
+        </div>
+    </div>
+    <script>
+        const ctx = document.getElementById('usageChart').getContext('2d');
+        const readings = [
+            {% for reading in readings %}
+            { date: '{{ reading.reading_date }}', units: {{ reading.units }} },
+            {% endfor %}
+        ];
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: readings.map(r => r.date),
+                datasets: [{
+                    label: 'Units Consumed',
+                    data: readings.map(r => r.units),
+                    borderColor: '#007bff',
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
